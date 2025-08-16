@@ -20,6 +20,7 @@ build:
 deploy:
   stage: deploy
   script:
+    - echo $BE_PORT
     - echo $IMAGE_VERSION
     - sudo su ${USER_PROJECT} -c "docker run --name $CI_PROJECT_NAME -dp $BE_PORT $IMAGE_VERSION"
   tags:
