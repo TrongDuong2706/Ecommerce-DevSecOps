@@ -22,7 +22,6 @@ deploy:
   variables:
     GIT_STRATEGY: none
   script:
-    - echo "Deploying new image: $IMAGE_VERSION"
     - sudo su ${USER_PROJECT} -c "docker run --name $CI_PROJECT_NAME -dp $BE_PORT $IMAGE_VERSION"
   tags:
     - online-shop-runner-dev-shell
