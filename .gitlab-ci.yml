@@ -11,7 +11,8 @@ build:
   variables:
     GIT_STRATEGY: clone
   script:
-    - docker build -t $IMAGE_VERSION .
+    # - docker build -t $IMAGE_VERSION .
+    - echo $BE_PORT
   tags:
     - online-shop-runner-dev-shell
   only:
