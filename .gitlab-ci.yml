@@ -12,7 +12,7 @@ build:
     GIT_STRATEGY: clone
   script:
     # - docker build -t $IMAGE_VERSION .
-    - echo $BE_PORT
+    - echo ${BE_PORT}
   tags:
     - online-shop-runner-dev-shell
   only:
@@ -23,7 +23,7 @@ deploy:
   script:
     - echo $BE_PORT
     - echo $IMAGE_VERSION
-    - sudo su ${USER_PROJECT} -c "docker run --name $CI_PROJECT_NAME -dp $BE_PORT $IMAGE_VERSION"
+    # - sudo su ${USER_PROJECT} -c "docker run --name $CI_PROJECT_NAME -dp $BE_PORT $IMAGE_VERSION"
   tags:
     - online-shop-runner-dev-shell
   only:
