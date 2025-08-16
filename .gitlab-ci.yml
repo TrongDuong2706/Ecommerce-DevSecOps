@@ -19,8 +19,6 @@ build:
 
 deploy:
   stage: deploy
-  variables:
-    GIT_STRATEGY: none
   script:
     - sudo su ${USER_PROJECT} -c "docker run --name $CI_PROJECT_NAME -dp $BE_PORT $IMAGE_VERSION"
   tags:
