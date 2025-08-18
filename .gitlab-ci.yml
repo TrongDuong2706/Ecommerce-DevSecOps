@@ -5,7 +5,7 @@ variables:
   TRIVY_IMAGE_REPORT: "security_scan_image_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
   ADDRESS_FRONTEND: "http://192.168.252.161:3000"
   ARACHNI_WEBSITE_REPORT: "security_scan_website_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
-  K6_PERFORMACE_TEST_REPORT: "performace_test_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
+  K6_PERFORMANCE_TEST_REPORT: "performance_test_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
 
 
 stages:
@@ -13,7 +13,7 @@ stages:
   - scan
   - deploy
   - security scan website
-  - performace testing
+  - performance testing
 
 build:
   stage: build
@@ -70,21 +70,22 @@ security scan website:
     paths:
       - $ARACHNI_WEBSITE_REPORT.html.zip
     expire_in: 1 day
-performace testing:
-    stage: performace testing
-    variables:
-        GIT_STRATEGY: none
-    script:
-        - chmod -R 777 ./performace_testing_script/
-        - docker run --rm -v $(pwd)/performace_testing_script:/performace_testing_script loadimpact/k6 run -e RESULTS_PATH=/performace_testing_script --summary-export=/performace_testing_script/summary_perf.json /performace_testing_script/smoke-test.js
-        - cat ./performace_testing_script/summary_perf.json | jq -r '["metric", "avg", "min", "med", "max", "p(90)", "p(95)"], (.metrics | to_entries[] | [.key, .value.avg, .value.min, .value.med, .value.max, .value["p(90)"], .value["p(95)"]]) | @csv' > $K6_PERFORMACE_TEST_REPORT.csv
-    after_script:
-        - sudo chown -R gitlab-runner $(pwd)
-    tags:
-        - online-shop-runner-dev-shell
-    only:
-        - tags
-    artifacts:
-        paths:
-        - $K6_PERFORMACE_TEST_REPORT.csv
-        expire_in: 1 day
+performance testing:
+  stage: performance testing
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - chmod -R 777 ./performance_testing_script/
+    - docker run --rm -v $(pwd)/performance_testing_script:/performance_testing_script loadimpact/k6 run -e RESULTS_PATH=/performance_testing_script --summary-export=/performance_testing_script/summary_perf.json /performance_testing_script/smoke-test.js
+    - cat ./performance_testing_script/summary_perf.json | jq -r '["metric", "avg", "min", "med", "max", "p(90)", "p(95)"], (.metrics | to_entries[] | [.key, .value.avg, .value.min, .value.med, .value.max, .value["p(90)"], .value["p(95)"]]) | @csv' > $K6_PERFORMANCE_TEST_REPORT.csv
+  after_script:
+    - sudo chown -R gitlab-runner $(pwd)
+  tags:
+    - online-shop-runner-dev-shell
+  only:
+    - tags
+  artifacts:
+    paths:
+      - $K6_PERFORMANCE_TEST_REPORT.csv
+    expire_in: 1 day
+
