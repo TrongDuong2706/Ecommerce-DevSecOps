@@ -25,8 +25,8 @@ trivy-scan-image:
   variables:
     GIT_STRATEGY: none
   script:
-    # Reset DB cache của Trivy để chắc chắn scan mới nhất
-    - docker run --rm -v $(pwd):/${CI_PROJECT_NAME} -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --reset
+    # Sửa lại: Dùng lệnh "clean --all" thay vì "--reset" để dọn dẹp cache
+    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy clean --all
     # Scan image vừa build, xuất ra báo cáo HTML
     - docker run --rm -v $(pwd):/${CI_PROJECT_NAME} -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image \
         --format template \
