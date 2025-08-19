@@ -7,8 +7,7 @@ export const options = {
 };
 
 export default function () {
-    // NOSONAR
-    const BASE_URL = 'http://192.168.252.161:3000/';
+    const BASE_URL = 'http://192.168.252.161:3000/'; // NOSONAR
     let res = http.get(BASE_URL);
     check(res, {
         'homepage status is 200': (r) => r.status === 200,
