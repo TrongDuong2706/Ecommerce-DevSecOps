@@ -1,13 +1,14 @@
 variables:
   USER_PROJECT: "onlineshop"
   HARBOR_PROJECT: "backend-devsecops"
-  IMAGE_VERSION: "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}"
+  IMAGE_VERSION: "${CI_REGISTRY}/${HARBOR_PROJECT}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}"
   TRIVY_IMAGE_REPORT: "security_scan_image_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
   ARACHNI_WEBSITE_REPORT: "security_scan_website_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
   K6_PERFORMANCE_TEST_REPORT: "performance_test_${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}_report"
   SONAR_PROJECT_VERSION: "v1.0.0"
 
-
+before_script:
+  - docker login -u $CI_REGISTER_USER -p $CI_REGISTER_PASSWORD $CI_REGISTRY
 
 
 stages:
@@ -65,11 +66,11 @@ trivy-scan-image:
     expire_in: 1 day
 
 push:
-  stage: push to registry
+  stage: push
   variables:
-    GIT_STRATEGY: none
+    GIT_STRATEGY: clone
   script:
-    - pwd
+    - docker push $IMAGE_VERSION
   tags:
     - online-shop-runner-dev-shell
   only:
