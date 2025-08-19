@@ -1,6 +1,7 @@
 Dự án ecommerce back end viết bằng dot net, FE viết bằng ReactJs
 Dự án tập trung vào quá trình pipeline DevSecOps sử dụng các công cụ như VMWare, EC2, gitlab, gitlab-ci, harbor, sonarqube, trivy, arachni, K6. Sử dụng Docker để triển khai dự án
 Pipeline DevSecOps bao gồm 7 quy trình build -> scan source code -> scan image -> push to private registry -> deploy -> security scan website -> performance testing
+![Pipeline Diagram](images/pipeline.png)
 1. Build: Sử dụng gitlab-runner để chạy CICD với executer là shell, clone code trên server rồi build
 2. Scan source code: Sử dụng sonarqube scanner để scan code, sonarqube server để nhận kết quả, quality gate mặc định
 3. Scan image: sử dụng trivy để scan image, lưu artifacts là file html
