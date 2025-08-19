@@ -21,7 +21,8 @@ RUN dotnet sonarscanner begin \
   /d:sonar.host.url="$SONAR_HOST_URL" \
   /d:sonar.login="$SONAR_TOKEN" \
   /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml \
-  /v:"$SONAR_VERSION"
+  /v:"$SONAR_VERSION" \
+  /d:sonar.qualitygate.wait=true
 
 # Restore NuGet packages
 COPY . .
@@ -38,6 +39,6 @@ RUN dotnet test \
   /p:CoverletOutput="/coverage"
 
 # End Sonar Scanner
-RUN dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN" /d:sonar.qualitygate.wait=true
+RUN dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
 
 
